@@ -1,15 +1,15 @@
 package com.studyolle.domain;
 
-import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Builder
+@Getter @Setter @EqualsAndHashCode(of = "id")
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Account {
@@ -29,6 +29,8 @@ public class Account {
 
     private String emailCheckToken;
 
+    private LocalDateTime emailCheckTokenGeneratedAt;
+
     private LocalDateTime joinedAt;
 
     private String bio;
@@ -43,11 +45,36 @@ public class Account {
     @Basic(fetch = FetchType.EAGER) // 기본 Lazy.. 이 profileImage 값들은 바뀔 수 있기 때문에 명시적으로.. user 로딩 시에 많이 쓰여서 eager
     private String profileImage;
 
-    private boolean studyCreatedResultByEmail;
+    private boolean studyCreatedByEmail;
 
-    private boolean studyEnrollmentResultByWeb;
+    private boolean studyCreatedByWeb = true;
+
+    private boolean studyEnrollmentResultByEmail;
+
+    private boolean studyEnrollmentResultByWeb = true;
 
     private boolean studyUpdatedByEmail;
 
-    private boolean studyUpdatedByWeb;
+    private boolean studyUpdatedByWeb = true;
+
+    @ManyToMany
+    private Set<Tag> tags;
+
+    public void generateEmailCheckToken() {
+        emailCheckToken = UUID.randomUUID().toString();
+        emailCheckTokenGeneratedAt = LocalDateTime.now();
+    }
+
+    public void completeSignUp() {
+        emailVerified = true;
+        joinedAt = LocalDateTime.now();
+    }
+
+    public boolean isValidToken(final String token) {
+        return emailCheckToken.equals(token);
+    }
+
+    public boolean canSendConfirmEmail() {
+        return emailCheckTokenGeneratedAt.isBefore(LocalDateTime.now().minusHours(1));
+    }
 }
