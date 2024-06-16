@@ -1,6 +1,6 @@
 spring:
   application:
-    name: studyolle
+    name: studywara
   profiles:
     active: local
   datasource:
@@ -22,8 +22,14 @@ spring:
         highlight_sql: true # ANSI 코드에 색을 나타낸다
         use_sql_comments: true # SQL 내부에 /* */ 주석 추가
 
-
 logging:
   level:
     org.hibernate.SQL: debug # logger에 출력하려면
     org.hibernate.type.descriptor.sql: trace # 파라미터 값 출력
+
+server:
+  tomcat:
+    max-http-form-post-size: 5MB
+
+app:
+  host: http://localhost:8080
