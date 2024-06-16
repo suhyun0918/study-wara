@@ -1,5 +1,6 @@
 package com.studyolle.domain;
 
+import com.studyolle.account.UserAccount;
 import lombok.*;
 
 import javax.persistence.*;
@@ -7,6 +8,11 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
+@NamedEntityGraph(name = "Study.withAll", attributeNodes = {
+        @NamedAttributeNode("tags"),
+        @NamedAttributeNode("zones"),
+        @NamedAttributeNode("managers"),
+        @NamedAttributeNode("members")})
 @Entity
 @Getter @Setter
 @Builder @NoArgsConstructor @AllArgsConstructor
@@ -55,5 +61,18 @@ public class Study {
 
     public void addManager(final Account account) {
         managers.add(account);
+    }
+
+    public boolean isJoinable(UserAccount userAccount) {
+        Account account = userAccount.getAccount();
+        return isPublished() && isRecruiting() && !members.contains(account) && !managers.contains(account);
+    }
+
+    public boolean isMember(UserAccount userAccount) {
+        return members.contains(userAccount.getAccount());
+    }
+
+    public boolean isManager(UserAccount userAccount) {
+        return managers.contains(userAccount.getAccount());
     }
 }
