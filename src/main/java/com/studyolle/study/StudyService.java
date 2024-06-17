@@ -73,14 +73,14 @@ public class StudyService {
     }
 
     public Study getStudyToUpdateTag(Account account, String path) {
-        Study study = studyRepository.findAccountWithTagsByPath(path);
+        Study study = studyRepository.findStudyWithTagsByPath(path);
         checkIfExistingStudy(path, study);
         checkIfManager(account, study);
         return study;
     }
 
     public Study getStudyToUpdateZone(Account account, String path) {
-        Study study = studyRepository.findAccountWithZonesByPath(path);
+        Study study = studyRepository.findStudyWithZonesByPath(path);
         checkIfExistingStudy(path, study);
         checkIfManager(account, study);
         return study;
@@ -98,4 +98,26 @@ public class StudyService {
         }
     }
 
+    public void publish(final Study study) {
+        study.publish();
+    }
+
+    public void close(final Study study) {
+        study.close();
+    }
+
+    public Study getStudyToUpdateStatus(final Account account, final String path) {
+        Study study = studyRepository.findStudyWithManagersByPath(path);
+        checkIfExistingStudy(path, study);
+        checkIfManager(account, study);
+        return study;
+    }
+
+    public void startRecruit(final Study study) {
+        study.startRecruit();
+    }
+
+    public void stopRecruit(final Study study) {
+        study.stopRecruit();
+    }
 }
