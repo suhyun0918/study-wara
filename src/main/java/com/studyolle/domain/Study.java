@@ -4,6 +4,8 @@ import com.studyolle.account.UserAccount;
 import lombok.*;
 
 import javax.persistence.*;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -21,6 +23,8 @@ import java.util.Set;
         @NamedAttributeNode("managers")})
 @NamedEntityGraph(name = "Study.withManagers", attributeNodes = {
         @NamedAttributeNode("managers")})
+@NamedEntityGraph(name = "Study.withMembers", attributeNodes = {
+        @NamedAttributeNode("members")})
 @Entity
 @Getter @Setter
 @Builder @NoArgsConstructor @AllArgsConstructor
@@ -127,5 +131,17 @@ public class Study {
 
     public boolean isRemovable() {
         return !published; // TODO : 모임을 했던 스터디는 삭제할 수 없다.
+    }
+
+    public String getEncodedPath() {
+        return URLEncoder.encode(path, StandardCharsets.UTF_8);
+    }
+
+    public void addMember(final Account account) {
+        members.add(account);
+    }
+
+    public void removeMember(final Account account) {
+        members.remove(account);
     }
 }

@@ -149,4 +149,12 @@ public class StudyService {
             throw new IllegalArgumentException("스터디를 삭제할 수 없습니다.");
         }
     }
+
+    public void addMember(final Study study, final Account account) {
+        study.addMember(account);
+    }
+
+    public void removeMember(final Study study, final Account account) {
+        study.removeMember(account);
+    }
 }
