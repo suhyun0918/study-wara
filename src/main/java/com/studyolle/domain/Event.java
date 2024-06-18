@@ -1,5 +1,6 @@
 package com.studyolle.domain;
 
+import com.studyolle.account.UserAccount;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,6 +8,10 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@NamedEntityGraph(
+        name = "Event.withEnrollments",
+        attributeNodes = @NamedAttributeNode("enrollments")
+)
 @Entity
 @Getter @Setter
 public class Event {
@@ -45,4 +50,36 @@ public class Event {
 
     @Enumerated(EnumType.STRING) // 기본값은 반드시 STRING을 써야한다. 그렇지 않으면 enum 순서에 따라 결정되므로 매우 위험
     private EventType eventType;
+
+    public boolean isEnrollableFor(UserAccount userAccount) {
+        return isNotClosed() && !isAlreadyEnrolled(userAccount);
+    }
+
+    public boolean isDisenrollableFor(UserAccount userAccount) {
+        return isNotClosed() && isAlreadyEnrolled(userAccount);
+    }
+
+    private boolean isNotClosed() {
+        return endEnrollmentDateTime.isAfter(LocalDateTime.now());
+    }
+
+    public boolean isAttended(UserAccount userAccount) {
+        Account account = userAccount.getAccount();
+        for (Enrollment e : enrollments) {
+            if (e.getAccount().equals(account) && e.isAttended()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isAlreadyEnrolled(UserAccount userAccount) {
+        Account account = userAccount.getAccount();
+        for (Enrollment e : this.enrollments) {
+            if (e.getAccount().equals(account)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
