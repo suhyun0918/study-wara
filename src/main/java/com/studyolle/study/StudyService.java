@@ -139,6 +139,6 @@ public class StudyService {
         if (!newPath.matches(StudyForm.VALID_PATH_PATTERN)) {
             return false;
         }
-        return studyRepository.existsByPath(newPath);
+        return !studyRepository.existsByPath(newPath);
     }
 }
