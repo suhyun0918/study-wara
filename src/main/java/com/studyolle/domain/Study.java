@@ -124,4 +124,8 @@ public class Study {
     public boolean canUpdateRecruiting() {
         return published && recruitingUpdatedDateTime == null || recruitingUpdatedDateTime.isBefore(LocalDateTime.now().minusHours(1));
     }
+
+    public boolean isRemovable() {
+        return !published; // TODO : 모임을 했던 스터디는 삭제할 수 없다.
+    }
 }
