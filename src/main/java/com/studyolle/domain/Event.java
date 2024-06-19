@@ -86,4 +86,8 @@ public class Event {
     public int numberOfRemainSpots() {
         return limitOfEnrollments - (int) enrollments.stream().filter(Enrollment::isAccepted).count();
     }
+
+    public long getNumberOfAcceptedEnrollments() {
+        return enrollments.stream().filter(Enrollment::isAccepted).count();
+    }
 }
