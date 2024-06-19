@@ -24,8 +24,7 @@ public class StudyService {
     public Study createNewStudy(Study study, Account account) {
         Study newStudy = studyRepository.save(study);
         newStudy.addManager(account);
-        eventPublisher.publishEvent(new StudyCreatedEvent(study));
-        return newStudy;
+         return newStudy;
     }
 
     public Study getStudyToUpdate(Account account, String path) {
@@ -104,6 +103,7 @@ public class StudyService {
 
     public void publish(final Study study) {
         study.publish();
+        eventPublisher.publishEvent(new StudyCreatedEvent(study));
     }
 
     public void close(final Study study) {
