@@ -46,6 +46,7 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
     implementation 'org.modelmapper:modelmapper:2.4.4'
+    testImplementation 'com.tngtech.archunit:archunit-junit5:0.23.1'
 }
 
 task copyFrontLib(type: Copy) {
