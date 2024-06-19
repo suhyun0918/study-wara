@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,17 +48,18 @@ public class Event {
     private Integer limitOfEnrollments;
 
     @OneToMany(mappedBy = "event")
-    private List<Enrollment> enrollments;
+    @OrderBy("enrolledAt")
+    private List<Enrollment> enrollments = new ArrayList<>();
 
     @Enumerated(EnumType.STRING) // 기본값은 반드시 STRING을 써야한다. 그렇지 않으면 enum 순서에 따라 결정되므로 매우 위험
     private EventType eventType;
 
     public boolean isEnrollableFor(UserAccount userAccount) {
-        return isNotClosed() && !isAlreadyEnrolled(userAccount);
+        return isNotClosed() && !isAttended(userAccount) && !isAlreadyEnrolled(userAccount);
     }
 
     public boolean isDisenrollableFor(UserAccount userAccount) {
-        return isNotClosed() && isAlreadyEnrolled(userAccount);
+        return isNotClosed() && !isAttended(userAccount) && isAlreadyEnrolled(userAccount);
     }
 
     private boolean isNotClosed() {
@@ -118,6 +120,7 @@ public class Event {
     public boolean canAccept(Enrollment enrollment) {
         return this.eventType == EventType.CONFIRMATIVE
                 && this.enrollments.contains(enrollment)
+                && this.limitOfEnrollments > this.getNumberOfAcceptedEnrollments()
                 && !enrollment.isAttended()
                 && !enrollment.isAccepted();
     }
@@ -138,6 +141,19 @@ public class Event {
             var waitingList = getWaitingList();
             int numberToAccept = (int) Math.min(this.limitOfEnrollments - this.getNumberOfAcceptedEnrollments(), waitingList.size());
             waitingList.subList(0, numberToAccept).forEach(e -> e.setAccepted(true));
+        }
+    }
+
+    public void accept(Enrollment enrollment) {
+        if (this.eventType == EventType.CONFIRMATIVE
+                && this.limitOfEnrollments > this.getNumberOfAcceptedEnrollments()) {
+            enrollment.setAccepted(true);
+        }
+    }
+
+    public void reject(Enrollment enrollment) {
+        if (this.eventType == EventType.CONFIRMATIVE) {
+            enrollment.setAccepted(false);
         }
     }
 
