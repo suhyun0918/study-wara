@@ -41,3 +41,4 @@ src/main/resources/static/node_modules
 
 ### DEV ###
 src/main/resources/application-dev.yml
+src/test/resources/application-dev.yml
