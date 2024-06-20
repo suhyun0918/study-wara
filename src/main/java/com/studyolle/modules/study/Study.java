@@ -136,4 +136,8 @@ public class Study {
     public boolean isManagedBy(final Account account) {
         return getManagers().contains(account);
     }
+
+    public String getImage() {
+        return image != null ? image : "/images/default_banner.png";
+    }
 }
