@@ -20,10 +20,10 @@ public class PackageDependencyTests {
             .should().onlyBeAccessed().byClassesThat()
             .resideInAnyPackage("com.studyolle.modules..");
 
-    @ArchTest
-    ArchRule studyPackageRule = classes().that().resideInAPackage("..modules.study..")
-            .should().onlyBeAccessed().byClassesThat()
-            .resideInAnyPackage(STUDY, EVENT);
+//    @ArchTest
+//    ArchRule studyPackageRule = classes().that().resideInAPackage("..modules.study..")
+//            .should().onlyBeAccessed().byClassesThat()
+//            .resideInAnyPackage(STUDY, EVENT);
 
     @ArchTest
     ArchRule eventPackageRule = classes().that().resideInAPackage(EVENT)

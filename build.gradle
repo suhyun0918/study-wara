@@ -13,8 +13,8 @@ node {
     nodeProjectDir = file('${projectDir}/src/main/resources/static')
 }
 
-group = 'com.studyolle'
-version = '0.0.1-SNAPSHOT'
+group = 'com.studywara'
+version = '1.0'
 
 java {
     sourceCompatibility = '11'
