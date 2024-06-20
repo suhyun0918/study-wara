@@ -2,7 +2,6 @@ package com.studyolle.modules.main;
 
 import com.studyolle.modules.account.Account;
 import com.studyolle.modules.account.CurrentUser;
-import com.studyolle.modules.notification.NotificationRepository;
 import com.studyolle.modules.study.Study;
 import com.studyolle.modules.study.StudyRepository;
 import lombok.RequiredArgsConstructor;
