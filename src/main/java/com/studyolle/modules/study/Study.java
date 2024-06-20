@@ -59,6 +59,8 @@ public class Study {
 
     private boolean useBanner;
 
+    private Integer memberCount;
+
     public void addManager(final Account account) {
         managers.add(account);
     }
@@ -127,10 +129,12 @@ public class Study {
 
     public void addMember(final Account account) {
         members.add(account);
+        memberCount++;
     }
 
     public void removeMember(final Account account) {
         members.remove(account);
+        memberCount--;
     }
 
     public boolean isManagedBy(final Account account) {
